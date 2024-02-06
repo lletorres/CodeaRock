@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>Bienvenidx a la calculadora de divisas!</h1>
+    <input type="text" id="nombre" placeholder="Ingrese su nombre" />
+
+    <h1 id="saludo"></h1>
+
+    <button id="entrar">Ingresar</button>
+    <br />
+    <br />
+    <hr />
+
+    <h2>Ingrese importe en pesos a convertir</h2>
+
+    <input type="text" id="importeEnPesos" /> <br /><br />
+    <!-- select de divisas -->
+    <label for="seleccionDivisa">Seleccione la divisa:</label>
+    <select id="seleccionDivisa">
+      <option value="dolarOficial">Dólar Oficial</option>
+      <option value="dolarBlue">Dólar Blue</option>
+      <option value="euro">Euro</option>
+    </select>
+
+    <button id="convertirPesosDivisas">Convertir a todas las divisas</button>
+
+    <h4 id="resultadoDivisas"></h4>
+
+    <script>
+      const bienvenida = () => {
+        let saludo = document.getElementById("saludo"); // extraigo lo que tiene el HTML
+        let nombre = document.getElementById("nombre").value; // que pasa si se guarda afuera?, si se una en una funcion, no se declara el .VALUE aca
+
+        saludo.innerHTML = "Bienvenidx " + nombre; // lo guardo en SALUDO en HTML = texto + lo del INPUT
+      };
+
+      let entrar = document.getElementById("entrar");
+
+      entrar.addEventListener("click", bienvenida);
+
+      // Pesos a Divisas
+
+      let importeEnPesos = document.getElementById("importeEnPesos");
+      let resultadoDivisas = document.getElementById("resultadoDivisas");
+      let convertirPesosDivisas = document.getElementById(
+        "convertirPesosDivisas"
+      );
+
+      const calcularDivisas = () => {
+        let numeroParseado = parseInt(importeEnPesos.value);
+        let resultadoPesosDolarOf = numeroParseado / 844.5;
+        let resultadoPesosDolarBlue = numeroParseado / 1225;
+        let resultadoPesosEuro = numeroParseado / 949;
+
+        resultadoDivisas.innerHTML =
+          "Pesos a Dolar Oficial: USD " +
+          resultadoPesosDolarOf.toFixed(2) +
+          "<br>" +
+          "Pesos a Dolar Blue: USD " +
+          resultadoPesosDolarBlue.toFixed(2) +
+          "<br>" +
+          "Pesos a Euro: € " +
+          resultadoPesosEuro.toFixed(2);
+      };
+
+      convertirPesosDivisas.addEventListener("click", calcularDivisas);
+    </script>
+  </body>
+</html>
