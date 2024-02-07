@@ -4,37 +4,125 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+    <style>
+      .contenedor {
+        height: 600px; /* Ancho máximo */
+        text-align: center;
+        margin: auto; /* Centrar */
+        background: rgb(0, 16, 36);
+        background: linear-gradient(
+          35deg,
+          rgba(0, 16, 36, 1) 24%,
+          rgba(77, 166, 241, 0.9836309523809523) 93%,
+          rgba(0, 62, 130, 0.865983893557423) 100%,
+          rgba(64, 64, 92, 1) 100%,
+          rgba(224, 226, 236, 1) 100%
+        );
+        padding: 20px; /* relleno */
+      }
+
+      .presentacion {
+        text-align: center; /* Centrar el texto dentro del contenedor */
+        margin: 0 auto; /* Centrar el contenedor en el eje horizontal */
+        font-family: Arial, Helvetica, sans-serif;
+        color: white;
+      }
+      .modoNoche {
+        background: black;
+        color: white;
+      }
+      .modoNocheConversor {
+        background: black;
+        color: white;
+      }
+      .conversor {
+        width: 500px;
+        height: 300px;
+        background: white;
+        display: inline-block;
+        /* con el float las pongo en linea */
+        margin: 10px;
+        border-radius: 15px;
+        box-shadow: 7px 10px 34px 0px rgba(0, 0, 0, 0.53);
+        -webkit-box-shadow: 7px 10px 34px 0px rgba(0, 0, 0, 0.53);
+        -moz-box-shadow: 7px 10px 34px 0px rgba(0, 0, 0, 0.53);
+        font-family: Arial, Helvetica, sans-serif;
+      }
+    </style>
   </head>
   <body>
-    <h1>Bienvenidx a la calculadora de divisas!</h1>
-    <input type="text" id="nombre" placeholder="Ingrese su nombre" />
+    <div class="contenedor" id="main">
+      <h1 class="presentacion">Bienvenidx a la calculadora de divisas!</h1>
+      <br />
 
-    <h1 id="saludo"></h1>
+      <input
+        type="text"
+        id="nombre"
+        placeholder="Ingrese su nombre"
+      /><br /><br />
 
-    <button id="entrar">Ingresar</button>
-    <br />
-    <br />
-    <hr />
+      <h1 id="saludo" class="presentacion"></h1>
+      <br />
 
-    <h2>Ingrese importe en pesos a convertir</h2>
+      <button id="entrar">Ingresar</button>
+      <br />
+      <br />
+      <div class="conversor" id="main">
+        <h2>Ingrese importe en pesos a convertir</h2>
+        <input type="text" id="importeEnPesos" /> <br /><br />
+        <!-- select de divisas -->
+        <label for="seleccionDivisa">Seleccione la divisa: </label>
+        <select id="seleccionDivisa">
+          <option value="dolarOficial">Dólar Oficial</option>
+          <option value="dolarBlue">Dólar Blue</option>
+          <option value="euro">Euro</option>
+        </select>
+        <img
+          id="imagenDivisa"
+          src="https://r2.easyimg.io/tf50ggwua/dolaroficial.png"
+          width="90"
+          alt="Divisa"
+        />
+        <br />
+        <br />
 
-    <input type="text" id="importeEnPesos" /> <br /><br />
-    <!-- select de divisas -->
-    <label for="seleccionDivisa">Seleccione la divisa:</label>
-    <select id="seleccionDivisa">
-      <option value="dolarOficial">Dólar Oficial</option>
-      <option value="dolarBlue">Dólar Blue</option>
-      <option value="euro">Euro</option>
-    </select>
+        <button id="convertir">Convertir</button>
 
-    <button id="convertirPesosDivisas">Convertir a todas las divisas</button>
-
-    <h4 id="resultadoDivisas"></h4>
+        <p id="resultadoDolarOficial"></p>
+        <p id="resultadoDolarBlue"></p>
+        <p id="resultadoEuro"></p>
+      </div>
+      <!-- Boton Modo Noche -->
+      <button id="botonModoNoche">Modo Noche</button>
+    </div>
 
     <script>
+      let main = document.getElementById("main");
+      let seleccionDivisa = document.getElementById("seleccionDivisa"); // instacia seleccionDivisa
+      let imagenDivisa = document.getElementById("imagenDivisa");
+      //SELECT para cambiar de imagen segun moneda
+      seleccionDivisa.addEventListener("change", () => {
+        if (seleccionDivisa.value == "dolarBlue") {
+          imagenDivisa.setAttribute(
+            "src",
+            "https://r2.easyimg.io/hc6qql0x2/dolarblue.png"
+          );
+        } else if (seleccionDivisa.value == "euro") {
+          imagenDivisa.setAttribute(
+            "src",
+            "https://r2.easyimg.io/cqbw2ze91/euro.png"
+          );
+        } else if (seleccionDivisa.value == "dolarOficial") {
+          imagenDivisa.setAttribute(
+            "src",
+            "https://r2.easyimg.io/tf50ggwua/dolaroficial.png"
+          );
+        }
+      });
+      // Funcion de bienvenida
       const bienvenida = () => {
         let saludo = document.getElementById("saludo"); // extraigo lo que tiene el HTML
-        let nombre = document.getElementById("nombre").value; // que pasa si se guarda afuera?, si se una en una funcion, no se declara el .VALUE aca
+        let nombre = document.getElementById("nombre").value;
 
         saludo.innerHTML = "Bienvenidx " + nombre; // lo guardo en SALUDO en HTML = texto + lo del INPUT
       };
@@ -43,32 +131,37 @@
 
       entrar.addEventListener("click", bienvenida);
 
-      // Pesos a Divisas
-
+      // declaro varriables para la funcion calcularDivisas
+      let convertir = document.getElementById("convertir"); // boton para calcular
       let importeEnPesos = document.getElementById("importeEnPesos");
-      let resultadoDivisas = document.getElementById("resultadoDivisas");
-      let convertirPesosDivisas = document.getElementById(
-        "convertirPesosDivisas"
+      let resultadoDolaroficial = document.getElementById(
+        "resultadoDolaroficial"
       );
+      let resultadoDolarBlue = document.getElementById("resultadoDolarBlue");
+      let resultadoEuro = document.getElementById("resultadoEuro");
 
       const calcularDivisas = () => {
         let numeroParseado = parseInt(importeEnPesos.value);
-        let resultadoPesosDolarOf = numeroParseado / 844.5;
-        let resultadoPesosDolarBlue = numeroParseado / 1225;
-        let resultadoPesosEuro = numeroParseado / 949;
-
-        resultadoDivisas.innerHTML =
-          "Pesos a Dolar Oficial: USD " +
-          resultadoPesosDolarOf.toFixed(2) +
-          "<br>" +
-          "Pesos a Dolar Blue: USD " +
-          resultadoPesosDolarBlue.toFixed(2) +
-          "<br>" +
-          "Pesos a Euro: € " +
-          resultadoPesosEuro.toFixed(2);
+        if (seleccionDivisa.value == "dolarOficial") {
+          // NO OLVIDARSE DE COMPARAR CON EL .VALUE !!!
+          resultadoDolarOficial.innerHTML =
+            "Pesos a Dolar Oficial: USD" + (numeroParseado / 844.5).toFixed(2);
+        } else if (seleccionDivisa.value == "dolarBlue") {
+          resultadoDolarBlue.innerHTML =
+            "Pesos a Dolar Blue: USD" + (numeroParseado / 1225).toFixed(2);
+        } else if (seleccionDivisa.value == "euro") {
+          resultadoEuro.innerHTML =
+            "Pesos a Euro: € " + (numeroParseado / 949).toFixed(2);
+        }
       };
 
-      convertirPesosDivisas.addEventListener("click", calcularDivisas);
+      convertir.addEventListener("click", calcularDivisas);
+      // modo noche
+
+      let botonModoNoche = document.getElementById("botonModoNoche");
+      botonModoNoche.addEventListener("click", () => {
+        main.classList.toggle("modoNocheConversor");
+      });
     </script>
   </body>
 </html>
