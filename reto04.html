@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Protest+Riot&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        margin: 0px;
+        padding: 0px;
+        background: #fafafa;
+      }
+      header {
+        height: 60px;
+        background: #c2bfbf;
+        width: 100%;
+      }
+      footer {
+        height: 60px;
+        background: #c2bfbf;
+        width: 100%;
+      }
+      .nombrePrograma {
+        font-size: 50px;
+        position: fixed;
+        top: 80px;
+        width: 100%;
+        background: #f0dcd3;
+        text-align: center;
+      }
+
+      .botonFab {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        background: #8f7e7ee3;
+        position: absolute;
+        right: 60px;
+        bottom: 150px;
+        color: rgb(255, 255, 255);
+        font-weight: bold;
+        font-size: 25px;
+        text-align: center;
+      }
+
+      .pantallaUno {
+        font-family: "Protest Riot", sans-serif;
+        text-align: center;
+        font-size: 20px;
+        font-style: normal;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        background: #f0dcd3;
+        width: 100%;
+        height: calc(100vh - 120px);
+      }
+
+      .pantallaDos {
+        font-family: "Protest Riot", sans-serif;
+        text-align: center;
+        font-size: 20px;
+        font-style: normal;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        background: #f0dcd3;
+        width: 100%;
+        height: calc(100vh - 120px);
+      }
+      .ingreseTarea {
+        font-size: 40px;
+        position: fixed;
+        top: 90px;
+        width: 100%;
+        background: #f0dcd3;
+        text-align: center;
+      }
+      .inputIngreseTarea {
+        position: fixed;
+        top: 160px;
+        width: 150px;
+        background: #ffffff;
+        text-align: center;
+        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.4);
+        border: 2px solid black;
+      }
+      .categoria {
+        font-size: 20px;
+        position: fixed;
+        top: 250px;
+        width: 100%;
+        background: #f0dcd3;
+        text-align: center;
+      }
+      .descripcion {
+        position: fixed;
+        top: 350px;
+        width: 210px;
+        text-align: left;
+      }
+      .inputDescripcion {
+        position: fixed;
+        top: 400px;
+        width: 200px;
+        height: 150px;
+        text-align: left;
+        border-radius: 5%;
+        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.4);
+        border: 1px solid black;
+        resize: none;
+        font-family: Arial, sans-serif;
+      }
+      .guardarTarea {
+        position: fixed;
+        top: 580px;
+        width: 130px;
+        height: 25px;
+        text-align: center;
+        font-weight: bold;
+      }
+      .tareaCargada {
+        width: 200px;
+        height: 50px;
+        background: white;
+        position: fixed;
+        top: 620px;
+        border-radius: 5px;
+        box-shadow: 7px 10px 34px 0px rgba(0, 0, 0, 0.2);
+        -webkit-box-shadow: 7px 10px 34px 0px rgba(0, 0, 0, 0.53);
+        -moz-box-shadow: 7px 10px 34px 0px rgba(0, 0, 0, 0.53);
+        font-family: Arial, Helvetica, sans-serif;
+        text-align: left;
+        font-size: 15px;
+        flex-direction: column;
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <header></header>
+    <!-- PRIMERA PANTALLA -->
+    <section class="pantallaUno" id="pantallaUno">
+      <div class="nombrePrograma">To-Do-List</div>
+      <div class="fraseMotivadora">
+        <h1>“Todo tiene un orden, aún dentro del caos”</h1>
+      </div>
+      <button class="botonFab" id="botonFab">+</button>
+    </section>
+    <!-- SEGUNDA PANTALLA -->
+    <!--  -->
+    <!-- INGRESAR TAREA -->
+    <section class="pantallaDos" id="pantallaDos">
+      <div class="ingreseTarea" id="ingreseTarea">Ingrese tarea: <br /></div>
+      <input
+        type="text"
+        class="inputIngreseTarea"
+        id="inputIngreseTarea"
+        placeholder="Ej: sacar la basura"
+      />
+      <!-- SELECCIONAR CATEGORIA -->
+      <div class="categoria" id="categoria">
+        <label for="seleccionarCategoria">Seleccione la categoria: </label
+        ><br /><br />
+        <select id="seleccionarCategoria">
+          <option value="hogar">Hogar</option>
+          <option value="aireLibre">Aire Libre</option>
+          <option value="trabajo">Trabajo</option>
+        </select>
+      </div>
+      <!-- DESCRIPCION -->
+      <div class="descripcion" id="descripcion">Descripción:</div>
+      <br />
+      <textarea
+        type="text"
+        class="inputDescripcion"
+        id="inputDescripcion"
+        placeholder="Ingrese descripcion"
+      ></textarea>
+      <button class="guardarTarea" id="guardarTarea">Guardar Tarea</button
+      ><br />
+
+      <p id="tareaCargada" class="tareaCargada"></p>
+    </section>
+    <!-- TERCERA PANTALLA -->
+
+    <section class="pantallaTres" id="pantallaTres"></section>
+
+    <footer></footer>
+
+    <script>
+      // BOTON FAB
+      let botonFab = document.getElementById("botonFab");
+      let pantallaUno = document.getElementById("pantallaUno");
+      //
+      let pantallaDos = document.getElementById("pantallaDos");
+
+      botonFab.addEventListener("click", () => {
+        pantallaUno.style.display = "none";
+        pantallaDos.style.display = "flex";
+      });
+
+      // GUARDAR TAREA
+
+      const botonGuardarTarea = () => {
+        let tareaCargada = document.getElementById("tareaCargada");
+        let inputIngreseTarea =
+          document.getElementById("inputIngreseTarea").value;
+        tareaCargada.innerHTML = inputIngreseTarea;
+        tareaCargada.style.display = "block";
+      };
+
+      let guardarTarea = document.getElementById("guardarTarea");
+      guardarTarea.addEventListener("click", botonGuardarTarea);
+    </script>
+  </body>
+</html>
