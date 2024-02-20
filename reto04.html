@@ -176,6 +176,24 @@
       .popDescripcion {
         display: none;
       }
+      .descripcionMostrada {
+        width: 200px;
+        height: 100px;
+        background: white;
+        display: none;
+        position: absolute;
+        border: 2px solid #000;
+      }
+      .mostrar {
+        display: block;
+      }
+
+      .tareaCargada li {
+        padding: 5px;
+      }
+      .mostrarDescripcion {
+        margin: 10px;
+      }
     </style>
   </head>
   <body>
@@ -240,6 +258,7 @@
         style="display: none"
       />
       <ul class="tareaCargada" id="tareaCargada"></ul>
+      <div id="descripcionMostrada" class="descripcionMostrada"></div>
     </section>
     <!-- CUARTA PANTALLA -->
     <section class="pantallaCuatro" id="pantallaCuatro"></section>
@@ -267,8 +286,18 @@
       let tareaTachada = document.getElementById("tareaTachada");
       let mostrarDescripcion = document.getElementById("mostrarDescripcion");
       let index = 0;
+      let descripcionMostrada = document.getElementById("descripcionMostrada");
 
       let guardar = () => {
+        if (
+          inputIngreseTarea.value.trim() === "" ||
+          seleccionarCategoria.value === "" ||
+          inputDescripcion.value.trim() === ""
+        ) {
+          alert("Por favor, completa todos los datos!");
+          return;
+        }
+
         if (seleccionarCategoria.value == "hogar") {
           imagenCategoria.setAttribute(
             "src",
@@ -308,7 +337,7 @@
         }')">✔</button>
         <div class="popDescripcion" id="popDescripcion"><p id="descripcionP">${
           inputDescripcion.value
-        }</p></div><button id="mostrarDescripcion" onclick="showDescripcion(${index})">Descripcion</button>
+        }</p></div><button id="mostrarDescripcion" class="mostrarDescripcion" onclick="showDescripcion(${index})">Descripcion</button>
         `;
         tareaCargada.innerHTML += modelo;
         inputIngreseTarea.value = ""; // LIMPIA EL INPUT
@@ -319,9 +348,10 @@
       let showDescripcion = (index) => {
         console.log(index);
         console.log(arrayTareas[index].descripcion);
-        descripcionP.innerHTML = arrayTareas[index].descripcion;
 
-        popDescripcion.style.display = "block";
+        descripcionMostrada.innerHTML = arrayTareas[index].descripcion;
+        // tareaMostrada.style.display = "block";
+        descripcionMostrada.classList.toggle("mostrar");
       };
 
       // TACHAR TAREA INGRESADA
@@ -337,6 +367,10 @@
         pantallaTres.style.display = "none";
       });
       botonFab2.addEventListener("click", () => {
+        if (arrayTareas.length === 0) {
+          alert("Por favor, agregue por lo menos una tarea antes de seguir!");
+          return;
+        }
         pantallaUno.style.display = "none";
         pantallaDos.style.display = "none";
         pantallaTres.style.display = "flex";
