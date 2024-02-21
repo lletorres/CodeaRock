@@ -67,7 +67,7 @@
         text-align: center;
         font-size: 20px;
         font-style: normal;
-        display: flex;
+        display: none;
         align-items: center;
         justify-content: center;
         flex-direction: column;
@@ -81,7 +81,7 @@
         text-align: center;
         font-size: 20px;
         font-style: normal;
-        display: none;
+        display: flex;
         align-items: center;
         justify-content: center;
         flex-direction: column;
@@ -113,6 +113,7 @@
         color: black;
       }
       .botonModoNoche {
+        width: 25px;
         position: absolute;
         top: 18px;
         left: 350px;
@@ -203,6 +204,14 @@
         align-items: center;
         justify-content: center;
       }
+      .botonBorrar {
+        width: 50px;
+        font-size: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 5px;
+      }
       .popDescripcion {
         display: none;
       }
@@ -222,8 +231,16 @@
         display: block;
       }
 
-      .tareaCargada li {
-        padding: 5px;
+      .tareaNoTachada {
+        padding: 10px;
+        color: black;
+        text-decoration: none;
+      }
+
+      .tareaTachada {
+        padding: 10px;
+        color: black;
+        text-decoration: line-through;
       }
       .mostrarDescripcion {
         margin: 10px;
@@ -253,7 +270,7 @@
     <section class="pantallaUno" id="pantallaUno">
       <div class="nombrePrograma" id="nombrePrograma">To-Do-List</div>
       <div class="fraseMotivadora">
-        <h1>“Todo tiene un orden, aún dentro del caos”</h1>
+        <h1 id="fraseRandom"></h1>
       </div>
       <button class="botonFab" id="botonFab">+</button>
     </section>
@@ -342,6 +359,7 @@
       let imagenCategoria = document.getElementById("imagenCategoria");
       let popDescripcion = document.getElementById("popDescripcion");
       let descripcionP = document.getElementById("descripcionP");
+      let tareaNoTachada = document.getElementById("tareaNoTachada");
       let tareaTachada = document.getElementById("tareaTachada");
       let mostrarDescripcion = document.getElementById("mostrarDescripcion");
       let index = 0;
@@ -352,7 +370,18 @@
       let footer = document.getElementById("footer");
       let nombrePrograma = document.getElementById("nombrePrograma");
       let categoria = document.getElementById("categoria");
-
+      let fraseRandom = document.getElementById("fraseRandom");
+      ////////////////////////////////////////////////////
+      let frases = [
+        "“Todo tiene un orden, aún dentro del caos”",
+        "“Cuando pierdas, no pierdas la lección”",
+        "“No busques los errores, busca un remedio”",
+        "“Tu actitud, no tu aptitud, determinará tu altitud”",
+        "“Si te caíste ayer, levántate hoy”",
+      ];
+      let random = Math.floor(Math.random() * 4);
+      fraseRandom.innerHTML = frases[random];
+      ///////////////////////////////////////////////////
       let guardar = () => {
         if (
           inputIngreseTarea.value.trim() === "" ||
@@ -395,37 +424,26 @@
         let modelo = `<img src="${imagenCategoria.getAttribute(
           "src"
         )}" width="30" alt="imagenDeLaCategoria" />
-        <li id=tareaTachada class="tareaTachada">${
+              <li id="tareaNoTachada" class="tareaNoTachada">${
+                inputIngreseTarea.value
+              }</li><button class="botonCheck" onclick="tachar('${
           inputIngreseTarea.value
-        }</li><button class="botonCheck" onclick="tachar('${
-          inputIngreseTarea.value
-        }')">✔</button>
-        <div class="popDescripcion" id="popDescripcion"><p id="descripcionP">${
-          inputDescripcion.value
-        }</p></div><button id="mostrarDescripcion" class="mostrarDescripcion" onclick="showDescripcion(${index})">Descripcion</button>
-        `;
+        }')">✔</button><button class="botonBorrar" onclick="borrarTarea(${index})">Borrar</button>
+              <div class="popDescripcion" id="popDescripcion"><p id="descripcionP">${
+                inputDescripcion.value
+              }</p></div><button id="mostrarDescripcion" class="mostrarDescripcion" onclick="showDescripcion(${index})">Descripcion</button>
+              `;
         tareaCargada.innerHTML += modelo;
         inputIngreseTarea.value = ""; // LIMPIA EL INPUT
         inputDescripcion.value = "";
         index++;
       };
-      //MOSTRAR DESCRIPCION
-      let showDescripcion = (index) => {
-        console.log(index);
-        console.log(arrayTareas[index].descripcion);
+      // BORRAR TAREA
 
-        descripcionEnPop.innerHTML = arrayTareas[index].descripcion;
-        categoriaP.innerHTML = arrayTareas[index].categoria;
-        // tareaMostrada.style.display = "block";
-        descripcionMostrada.classList.toggle("mostrar");
-      };
+      let borrarTarea = (index) => {
+        arrayTareas.splice(index, 1);
 
-      // TACHAR TAREA INGRESADA
-      let tachar = (tarea) => {
-        console.log(tarea);
-        let tachado = `<del>${tarea}</del>`;
-
-        tareaTachada.innerHTML += tachado;
+        console.log(arrayTareas);
       };
 
       // CERRAR VENTANA
@@ -459,6 +477,23 @@
         pantallaUno.classList.toggle("pantallaModoNoche");
         pantallaDos.classList.toggle("pantallaModoNoche");
         pantallaTres.classList.toggle("pantallaTresModoNoche");
+      };
+      // TACHAR TAREA INGRESADA
+      let tachar = (tarea) => {
+        console.log(tarea);
+
+        tareaNoTachada.classList.toggle("tareaTachada");
+      };
+
+      //MOSTRAR DESCRIPCION
+      let showDescripcion = (index) => {
+        console.log(index);
+        console.log(arrayTareas[index].descripcion);
+
+        descripcionEnPop.innerHTML = arrayTareas[index].descripcion;
+        categoriaP.innerHTML = arrayTareas[index].categoria;
+        // tareaMostrada.style.display = "block";
+        descripcionMostrada.classList.toggle("mostrar");
       };
     </script>
   </body>
