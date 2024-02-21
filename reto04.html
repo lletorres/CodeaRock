@@ -438,12 +438,15 @@
         inputDescripcion.value = "";
         index++;
       };
-      // BORRAR TAREA
+         //MOSTRAR DESCRIPCION
+      let showDescripcion = (index) => {
+        console.log(index);
+        console.log(arrayTareas[index].descripcion);
 
-      let borrarTarea = (index) => {
-        arrayTareas.splice(index, 1);
-
-        console.log(arrayTareas);
+        descripcionEnPop.innerHTML = arrayTareas[index].descripcion;
+        categoriaP.innerHTML = arrayTareas[index].categoria;
+        // tareaMostrada.style.display = "block";
+        descripcionMostrada.classList.toggle("mostrar");
       };
 
       // CERRAR VENTANA
@@ -484,17 +487,15 @@
 
         tareaNoTachada.classList.toggle("tareaTachada");
       };
+      // BORRAR TAREA
 
-      //MOSTRAR DESCRIPCION
-      let showDescripcion = (index) => {
-        console.log(index);
-        console.log(arrayTareas[index].descripcion);
+      let borrarTarea = (index) => {
+        arrayTareas.splice(index, 1);
 
-        descripcionEnPop.innerHTML = arrayTareas[index].descripcion;
-        categoriaP.innerHTML = arrayTareas[index].categoria;
-        // tareaMostrada.style.display = "block";
-        descripcionMostrada.classList.toggle("mostrar");
+        console.log(arrayTareas);
       };
+
+
     </script>
   </body>
 </html>
