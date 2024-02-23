@@ -184,16 +184,17 @@
         text-align: center;
         font-weight: bold;
       }
-      .tareaCargada {
+      .contenedorTareaCargada {
         border: 2px solid #000;
         background-color: #f2f2f2;
-        padding: 20px;
-        max-width: 400px;
-        margin: 0 auto;
+        padding: 15px;
+        width: auto;
+        height: 10px;
+        margin: 10px;
         border-radius: 10px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
         justify-content: center;
         align-items: center;
       }
@@ -232,18 +233,33 @@
       }
 
       .tareaNoTachada {
-        padding: 10px;
+        padding: 5px;
         color: black;
         text-decoration: none;
+        font-size: 15px;
+        width: auto;
       }
-
-      .tareaTachada {
-        padding: 10px;
-        color: black;
+      .botonera {
+        display: flex;
+        align-items: center;
+        margin-left: auto;
+      }
+      .realizado {
+        font-size: 12px;
+      }
+      .tachar {
+        text-decoration: line-through;
+      }
+      .botonBorrar {
+        font-size: 10px;
+      }
+      .completada li {
+        color: #a1a1a1;
         text-decoration: line-through;
       }
       .mostrarDescripcion {
-        margin: 10px;
+        margin: 0px;
+        font-size: 10px;
       }
       .botonCerrar {
         position: absolute;
@@ -309,8 +325,7 @@
           id="inputDescripcion"
           placeholder="Ingrese descripcion"
         />
-        <button class="guardarTarea" id="guardarTarea" onclick="guardar()">
-          Guardar Tarea</button
+        <button class="guardarTarea" id="guardarTarea">Guardar Tarea</button
         ><br />
       </div>
       <button class="botonFab" id="botonFab2">+</button>
@@ -318,14 +333,9 @@
     <!-- TERCERA PANTALLA -->
 
     <section class="pantallaTres" id="pantallaTres">
-      <img
-        id="imagenCategoria"
-        src="https://r2.easyimg.io/0u2pc8neb/hogar.png"
-        width="30"
-        alt="imagenDeLaCategoria"
-        style="display: none"
-      />
-      <ul class="tareaCargada" id="tareaCargada"></ul>
+      <!-- <ul class="tareaCargada" id="tareaCargada"></ul> -->
+      <div id="tareaCargada"></div>
+
       <div id="descripcionMostrada" class="descripcionMostrada">
         <p id="categoriaP" class="categoriaP"></p>
         <p id="descripcionEnPop" class="descripcionEnPop"></p>
@@ -349,11 +359,8 @@
       let pantallaDos = document.getElementById("pantallaDos");
       let pantallaTres = document.getElementById("pantallaTres");
       // VARIABLES BOTON GUARDAR TAREA
-      let inputIngreseTarea = document.getElementById("inputIngreseTarea");
-      let seleccionarCategoria = document.getElementById(
-        "seleccionarCategoria"
-      );
-      let inputDescripcion = document.getElementById("inputDescripcion");
+      let guardarTareaBoton = document.getElementById("guardarTarea");
+
       let tareaCargada = document.getElementById("tareaCargada");
       let arrayTareas = [];
       let imagenCategoria = document.getElementById("imagenCategoria");
@@ -381,8 +388,15 @@
       ];
       let random = Math.floor(Math.random() * 4);
       fraseRandom.innerHTML = frases[random];
-      ///////////////////////////////////////////////////
-      let guardar = () => {
+      ///////////////////////////////////////////////////BOTON GUARDAR TAREA
+      guardarTareaBoton.addEventListener("click", () => {
+        ////////VARIABLES QUE VOY A USAR DESDE EL HTML//////////
+        let inputIngreseTarea = document.getElementById("inputIngreseTarea");
+        let seleccionarCategoria = document.getElementById(
+          "seleccionarCategoria"
+        );
+        let inputDescripcion = document.getElementById("inputDescripcion");
+        //////////////////////////////////
         if (
           inputIngreseTarea.value.trim() === "" ||
           seleccionarCategoria.value === "" ||
@@ -391,62 +405,69 @@
           alert("Por favor, completa todos los datos!");
           return;
         }
-
+        let emojiCategoria; //DECLARO VARIABLE PARA EMOJIS
         if (seleccionarCategoria.value == "hogar") {
-          imagenCategoria.setAttribute(
-            "src",
-            "https://r2.easyimg.io/0u2pc8neb/hogar.png"
-          );
+          emojiCategoria = "&#127968;";
         } else if (seleccionarCategoria.value == "compras") {
-          imagenCategoria.setAttribute(
-            "src",
-            "https://r2.easyimg.io/kufg62mx1/compras.png"
-          );
+          emojiCategoria = "&#x1F6D2;";
         } else if (seleccionarCategoria.value == "aireLibre") {
-          imagenCategoria.setAttribute(
-            "src",
-            "https://r2.easyimg.io/gmd54wajk/airelibre.png"
-          );
+          emojiCategoria = "&#x1F6B5;";
         } else if (seleccionarCategoria.value == "trabajo") {
-          imagenCategoria.setAttribute(
-            "src",
-            "https://r2.easyimg.io/yjukumjf1/trabajo.png"
-          );
+          emojiCategoria = "&#x1F4BC;";
         }
+
         let obj = {
           // guardo en el objeto lo que ingreso con el input, select o imagen
-          imagen: imagenCategoria.value, //se usa el .VALUE acá , porque es el dato que esta en este momento de ejecucion
-          tarea: inputIngreseTarea.value,
-          categoria: seleccionarCategoria.value,
+          //se usa el .VALUE acá , porque es el dato que esta en este momento de ejecucion
+          titulo: inputIngreseTarea.value,
+          categoria: emojiCategoria,
           descripcion: inputDescripcion.value,
+          id: "tarea-" + index,
+          realizada: false,
+          count: index,
         };
-        arrayTareas.push(obj);
-        let modelo = `<img src="${imagenCategoria.getAttribute(
-          "src"
-        )}" width="30" alt="imagenDeLaCategoria" />
-              <li id="tareaNoTachada" class="tareaNoTachada">${
-                inputIngreseTarea.value
-              }</li><button class="botonCheck" onclick="tachar('${
-          inputIngreseTarea.value
-        }')">✔</button><button class="botonBorrar" onclick="borrarTarea(${index})">Borrar</button>
-              <div class="popDescripcion" id="popDescripcion"><p id="descripcionP">${
-                inputDescripcion.value
-              }</p></div><button id="mostrarDescripcion" class="mostrarDescripcion" onclick="showDescripcion(${index})">Descripcion</button>
+        // en ID guardo un identificador unico agregandole TAREA + la posicion del array, asi es mas facil ubicar un obejto por ID
+        arrayTareas.push(obj); //agrego elemento al array de objetos
+        tareaCargada.innerHTML = " ";
+        arrayTareas.map((tarea) => {
+          let modelo = `<div class="contenedorTareaCargada" ><p id="emoji">${tarea.categoria}</p>
+              <p id="${tarea.id}" class="tareaNoTachada">${tarea.titulo}</p>
+              <div class="botonera"><p class="realizado">Realizado</p>
+              <input type="checkbox" name="realizado" id="${tarea.id}" onchange="tacharTexto(${tarea.count})">
+              <button class="botonBorrar" onclick="borrarTarea(${tarea.count})">Borrar</button>
+              <div class="popDescripcion" id="popDescripcion"><p id="descripcionP">${tarea.descripcion}</p></div>
+              <button id="mostrarDescripcion" class="mostrarDescripcion" onclick="showDescripcion(${tarea.count})">Descripcion</button></div>
+            </div>
               `;
-        tareaCargada.innerHTML += modelo;
-        inputIngreseTarea.value = ""; // LIMPIA EL INPUT
-        inputDescripcion.value = "";
+          tareaCargada.innerHTML += modelo;
+          inputIngreseTarea.value = ""; // LIMPIA EL INPUT
+          inputDescripcion.value = "";
+        });
         index++;
+      });
+      // BORRAR TAREA
+      let borrarTarea = (index) => {
+        arrayTareas.splice(index, 1);
+        console.log(arrayTareas);
       };
-         //MOSTRAR DESCRIPCION
+
+      //MOSTRAR DESCRIPCION
       let showDescripcion = (index) => {
+        descripcionEnPop.innerHTML = "";
         console.log(index);
         console.log(arrayTareas[index].descripcion);
 
         descripcionEnPop.innerHTML = arrayTareas[index].descripcion;
         categoriaP.innerHTML = arrayTareas[index].categoria;
-        // tareaMostrada.style.display = "block";
         descripcionMostrada.classList.toggle("mostrar");
+      };
+
+      //Tachar texto de tarea realizada
+      let tacharTexto = (index) => {
+        let titleTarea = document.getElementById(`${arrayTareas[index].id}`);
+        console.log(titleTarea);
+        titleTarea.classList.toggle("tachar");
+        arrayTareas[index].realizada = "true";
       };
 
       // CERRAR VENTANA
@@ -481,21 +502,6 @@
         pantallaDos.classList.toggle("pantallaModoNoche");
         pantallaTres.classList.toggle("pantallaTresModoNoche");
       };
-      // TACHAR TAREA INGRESADA
-      let tachar = (tarea) => {
-        console.log(tarea);
-
-        tareaNoTachada.classList.toggle("tareaTachada");
-      };
-      // BORRAR TAREA
-
-      let borrarTarea = (index) => {
-        arrayTareas.splice(index, 1);
-
-        console.log(arrayTareas);
-      };
-
-
     </script>
   </body>
 </html>
