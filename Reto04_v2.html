@@ -14,6 +14,10 @@
     />
 
     <style>
+      * {
+        margin: 0px;
+        padding: 0px;
+      }
       body {
         margin: 0px;
         padding: 0px;
@@ -54,8 +58,8 @@
         border-radius: 50%;
         background: #8f7e7ee3;
         position: absolute;
-        right: 60px;
-        bottom: 120px;
+        right: auto;
+        bottom: 90px;
         color: rgb(255, 255, 255);
         font-weight: bold;
         font-size: 25px;
@@ -67,7 +71,7 @@
         text-align: center;
         font-size: 20px;
         font-style: normal;
-        display: none;
+        display: flex;
         align-items: center;
         justify-content: center;
         flex-direction: column;
@@ -81,7 +85,7 @@
         text-align: center;
         font-size: 20px;
         font-style: normal;
-        display: flex;
+        display: none;
         align-items: center;
         justify-content: center;
         flex-direction: column;
@@ -178,22 +182,23 @@
       }
       .guardarTarea {
         position: fixed;
-        top: 450px;
+        top: 457px;
         width: 130px;
         height: 25px;
         text-align: center;
         font-weight: bold;
       }
-      .tareaCargada {
+      .contenedorTareaCargada {
         border: 2px solid #000;
         background-color: #f2f2f2;
-        padding: 20px;
-        max-width: 400px;
-        margin: 0 auto;
+        padding: 15px;
+        width: auto;
+        height: 10px;
+        margin: 10px;
         border-radius: 10px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
         justify-content: center;
         align-items: center;
       }
@@ -217,8 +222,8 @@
       }
       .descripcionMostrada {
         font-family: "PT Sans", sans-serif;
-        width: 300px;
-        height: auto;
+        width: 310px;
+        height: 100px;
         background: #dadada;
         display: none;
         flex-direction: column;
@@ -226,29 +231,47 @@
         border: 2px solid #000;
         border-radius: 10px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 10);
+        padding-bottom: 40px;
       }
       .mostrar {
         display: block;
       }
 
       .tareaNoTachada {
-        padding: 10px;
+        padding: 5px;
         color: black;
         text-decoration: none;
+        font-size: 15px;
+        width: auto;
+      }
+      .botonera {
+        display: flex;
+        align-items: center;
+        margin-left: auto;
+      }
+      .realizado {
+        font-size: 12px;
       }
       .tachar {
         text-decoration: line-through;
+      }
+      .botonTachar {
+        font-size: 10px;
+      }
+      .botonBorrar {
+        font-size: 10px;
       }
       .completada li {
         color: #a1a1a1;
         text-decoration: line-through;
       }
       .mostrarDescripcion {
-        margin: 10px;
+        margin: 0px;
+        font-size: 10px;
       }
       .botonCerrar {
         position: absolute;
-        bottom: 4px;
+        bottom: 10px;
         left: 42%;
       }
       .descripcionEnPop {
@@ -258,6 +281,47 @@
       .categoriaP {
         font-weight: bolder;
         font-size: 25px;
+      }
+
+      .confirmacionPopUp {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: #d3d3d3;
+        padding: 10px;
+        border: 4px solid #494545;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        z-index: 9999;
+      }
+
+      .confirmacionPopUp p {
+        margin-bottom: 20px;
+        font-weight: bold;
+      }
+
+      .botoneraConfirmacion {
+        margin-right: 10px;
+        padding: 5px;
+        cursor: pointer;
+        font-size: 10px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+      }
+      .btnBorrar {
+        font-size: 12px;
+        padding: 4px;
+        width: 70px;
+        margin-left: 10px;
+      }
+      .btnCancelar {
+        font-size: 12px;
+        padding: 4px;
+        width: 70px;
+        margin-left: 10px;
       }
     </style>
   </head>
@@ -310,22 +374,44 @@
           id="inputDescripcion"
           placeholder="Ingrese descripcion"
         />
-        <button class="guardarTarea" id="guardarTarea">Guardar Tarea</button
-        ><br />
+        <button class="guardarTarea" id="guardarTarea">Ver Listado</button>
       </div>
       <button class="botonFab" id="botonFab2">+</button>
     </section>
     <!-- TERCERA PANTALLA -->
 
     <section class="pantallaTres" id="pantallaTres">
-      <ul class="tareaCargada" id="tareaCargada"></ul>
-      <div id="descripcionMostrada" class="descripcionMostrada">
+      <!-- <ul class="tareaCargada" id="tareaCargada"></ul> -->
+      <div id="tareaCargada"></div>
+
+      <div id="descripcionMostradaID" class="descripcionMostrada">
         <p id="categoriaP" class="categoriaP"></p>
         <p id="descripcionEnPop" class="descripcionEnPop"></p>
         <button class="botonCerrar" id="botonCerrar" onclick="cerrarPop()">
           Cerrar
         </button>
       </div>
+      <!-- CONFIRMAR ELIMINAR -->
+      <div id="confirmacionPopUp" class="confirmacionPopUp">
+        <p>Estás seguro de borrar esta tarea?</p>
+        <div class="botoneraConfirmacion">
+          <button
+            id="confirmarBorrar"
+            class="btnBorrar"
+            onclick="confirmarBorrar()"
+          >
+            Confirmar</button
+          ><br />
+          <button
+            id="cancelarBorrar"
+            class="btnCancelar"
+            onclick="cancelarBorrar()"
+          >
+            Cancelar
+          </button>
+        </div>
+      </div>
+
       <button class="botonFab" id="botonFab3">-</button>
     </section>
     <!-- CUARTA PANTALLA -->
@@ -336,24 +422,23 @@
     <script>
       // VARIABLES BOTON FAB
       let botonFab = document.getElementById("botonFab");
-      let botonFab2 = document.getElementById("botonFab2");
+      let botonFab2 = document.getElementById("guardarTarea");
       let botonFab3 = document.getElementById("botonFab3");
       let pantallaUno = document.getElementById("pantallaUno");
       let pantallaDos = document.getElementById("pantallaDos");
       let pantallaTres = document.getElementById("pantallaTres");
       // VARIABLES BOTON GUARDAR TAREA
-      let guardarTareaBoton = document.getElementById("guardarTarea");
-
+      let guardarTareaBoton = document.getElementById("botonFab2");
       let tareaCargada = document.getElementById("tareaCargada");
       let arrayTareas = [];
       let imagenCategoria = document.getElementById("imagenCategoria");
       let popDescripcion = document.getElementById("popDescripcion");
       let descripcionP = document.getElementById("descripcionP");
-      let tareaNoTachada = document.getElementById("tareaNoTachada");
-      let tareaTachada = document.getElementById("tareaTachada");
       let mostrarDescripcion = document.getElementById("mostrarDescripcion");
       let index = 0;
-      let descripcionMostrada = document.getElementById("descripcionMostrada");
+      let descripcionMostradaID = document.getElementById(
+        "descripcionMostradaID"
+      );
       let descripcionEnPop = document.getElementById("descripcionEnPop");
       let categoriaP = document.getElementById("categoriaP");
       let header = document.getElementById("header");
@@ -406,55 +491,107 @@
           categoria: emojiCategoria,
           descripcion: inputDescripcion.value,
           id: "tarea-" + index,
-          realizada: false,
+          tachar: false,
           count: index,
         };
         // en ID guardo un identificador unico agregandole TAREA + la posicion del array, asi es mas facil ubicar un obejto por ID
         arrayTareas.push(obj); //agrego elemento al array de objetos
+        dibujar(); // llamo a DIBUJAR es una funcion que actualiza los datos que voyt cargando
+      });
+      let dibujar = () => {
+        //siempre lo que tengo que devolver a pantalla y se tiene que iterar, declararlo a una funcion. TENERLO APARTE
         tareaCargada.innerHTML = " ";
+        let modelo = "";
         arrayTareas.map((tarea) => {
-          let modelo = `<p>${tarea.categoria}</p>
-              <li id="${tarea.id}" class="tareaNoTachada">${tarea.titulo}</li>
-              <p>Realizado </p>
-              <input type="checkbox" name="realizado" id="${tarea.id}" onchange="tacharTexto(${tarea.count})">
-              <button class="botonBorrar" onclick="borrarTarea(${tarea.count})">Borrar</button>
+          if (!tarea.tachar) {
+            modelo = `<div class="contenedorTareaCargada" ><p id="emoji">${tarea.categoria}</p>
+              <p id="${tarea.id}" class="tareaNoTachada">${tarea.titulo}</p>
+              <div class="botonera">
+                <button class="botonTachar" onclick="tacharTexto('${tarea.id}')">Tachar</button>
+              <button class="botonBorrar" onclick="borrarTarea('${tarea.id}')">Borrar</button>
               <div class="popDescripcion" id="popDescripcion"><p id="descripcionP">${tarea.descripcion}</p></div>
-              <button id="mostrarDescripcion" class="mostrarDescripcion" onclick="showDescripcion(${tarea.count})">Descripcion</button>
+              <button id="mostrarDescripcion" class="mostrarDescripcion" onclick="showDescripcion('${tarea.id}')">Descripcion</button></div>
+            </div>
               `;
+          } else {
+            modelo = `<div class="contenedorTareaCargada" ><p id="emoji">${tarea.categoria}</p>
+              <p id="${tarea.id}" class="tareaNoTachada tachar">${tarea.titulo}</p>
+              <div class="botonera">
+                <button class="botonTachar" onclick="tacharTexto('${tarea.id}')">Tachar</button>
+              <button class="botonBorrar" onclick="borrarTarea('${tarea.id}')">Borrar</button>
+              <div class="popDescripcion" id="popDescripcion"><p id="descripcionP">${tarea.descripcion}</p></div>
+              <button id="mostrarDescripcion" class="mostrarDescripcion" onclick="showDescripcion('${tarea.id}')">Descripcion</button></div>
+            </div>
+              `;
+          }
+
           tareaCargada.innerHTML += modelo;
           inputIngreseTarea.value = ""; // LIMPIA EL INPUT
           inputDescripcion.value = "";
         });
         index++;
-      });
+        localStorage.setItem("tareasLocales", JSON.stringify(arrayTareas));
+        localStorage.setItem("contador", index);
+      };
+
       // BORRAR TAREA
-      let borrarTarea = (index) => {
-        arrayTareas.splice(index, 1);
-        console.log(arrayTareas);
+      let borrarTarea = (idd) => {
+        // Mostrar el pop-up de confirmación
+        let confirmacionPopUp = document.getElementById("confirmacionPopUp");
+        confirmacionPopUp.style.display = "block"; //cambia el display del css del ID confirmacionPopUp
+
+        // Almacenar el ID de la tarea actual
+        tareaActualID = idd;
+      };
+
+      let confirmarBorrar = () => {
+        // Ocultar el pop-up de confirmación
+        confirmacionPopUp.style.display = "none";
+
+        // Obtener el ID almacenado y proceder con la eliminación
+        let idd = tareaActualID;
+        console.log(idd);
+        arrayTareas.splice(encontrar(idd), 1);
+        dibujar();
+        if (arrayTareas.length == 0) {
+          console.log("hay ", arrayTareas.length, " tareas cargadas");
+          pantallaUno.style.display = "none";
+          pantallaDos.style.display = "flex";
+          pantallaTres.style.display = "none";
+        }
+      };
+
+      let cancelarBorrar = () => {
+        // Ocultar el pop-up de confirmación
+        confirmacionPopUp.style.display = "none";
       };
 
       //MOSTRAR DESCRIPCION
-      let showDescripcion = (index) => {
+      let showDescripcion = (idd) => {
         descripcionEnPop.innerHTML = "";
-        console.log(index);
-        console.log(arrayTareas[index].descripcion);
 
-        descripcionEnPop.innerHTML = arrayTareas[index].descripcion;
-        categoriaP.innerHTML = arrayTareas[index].categoria;
-        descripcionMostrada.classList.toggle("mostrar");
+        console.log(idd);
+        descripcionEnPop.innerHTML = arrayTareas[encontrar(idd)].descripcion;
+        categoriaP.innerHTML = arrayTareas[encontrar(idd)].categoria;
+        descripcionMostradaID.classList.toggle("mostrar"); // el descripcionMostradaID es el id del popup, lo llamo para cambiarle el css, el css .mostrar
+        // dibujar();
       };
 
       //Tachar texto de tarea realizada
-      let tacharTexto = (index) => {
-        let titleTarea = document.getElementById(`${arrayTareas[index].id}`);
-        console.log(titleTarea.value);
-        titleTarea.classList.toggle("tachar");
-        tareas[index].realizada = "true";
+      let tacharTexto = (idd) => {
+        arrayTareas[encontrar(idd)].tachar =
+          !arrayTareas[encontrar(idd)].tachar; //busca el ID de la tarea a tachar
+        dibujar();
+      };
+
+      let encontrar = (idd) => {
+        let posicion = arrayTareas.findIndex((tarea) => tarea.id === idd);
+        return posicion;
       };
 
       // CERRAR VENTANA
       let cerrarPop = () => {
-        descripcionMostrada.classList.remove("mostrar");
+        descripcionMostradaID.classList.remove("mostrar");
       };
       botonFab.addEventListener("click", () => {
         pantallaUno.style.display = "none";
@@ -484,6 +621,12 @@
         pantallaDos.classList.toggle("pantallaModoNoche");
         pantallaTres.classList.toggle("pantallaTresModoNoche");
       };
+      let arrayTareasViejo = JSON.parse(localStorage.getItem("tareasLocales"));
+      if (arrayTareasViejo.length > 0) {
+        arrayTareas = arrayTareasViejo;
+
+        dibujar();
+      }
     </script>
   </body>
 </html>
