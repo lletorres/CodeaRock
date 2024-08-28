@@ -51,19 +51,40 @@
         /* background: #f0dcd3; */
         text-align: center;
       }
-
-      .botonFab {
+      .botonFabPantallaUno {
         width: 45px;
         height: 45px;
         border-radius: 50%;
         background: #8f7e7ee3;
         position: absolute;
-        right: auto;
-        bottom: 90px;
         color: rgb(255, 255, 255);
         font-weight: bold;
         font-size: 25px;
         text-align: center;
+        top: 760px;
+        right: 50px;
+      }
+      .botonFab {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        background: #8f7e7ee3;
+
+        color: rgb(255, 255, 255);
+        font-weight: bold;
+        font-size: 25px;
+        text-align: center;
+      }
+      .agregarMasTareas {
+        margin-right: 10px;
+      }
+      .masTareasFab {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        position: fixed;
+        top: 760px;
+        right: 50px;
       }
 
       .pantallaUno {
@@ -172,7 +193,7 @@
         position: fixed;
         top: 400px;
         width: 200px;
-        height: 20px;
+        height: 100px;
         text-align: center;
         border-radius: 5%;
         box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.4);
@@ -180,9 +201,20 @@
         resize: none;
         font-family: Arial, sans-serif;
       }
-      .guardarTarea {
-        position: fixed;
-        top: 457px;
+      .botoneraGuardarVer {
+        display: flex;
+        margin-top: 240px;
+      }
+      .verListado {
+        top: 550px;
+        width: 130px;
+        height: 25px;
+        text-align: center;
+        font-weight: bold;
+        margin-left: 10px;
+      }
+      .btnGuardarTarea {
+        top: 550px;
         width: 130px;
         height: 25px;
         text-align: center;
@@ -337,7 +369,8 @@
       <div class="fraseMotivadora">
         <h1 id="fraseRandom"></h1>
       </div>
-      <button class="botonFab" id="botonFab">+</button>
+
+      <button class="botonFabPantallaUno" id="botonFab">+</button>
     </section>
     <!-- SEGUNDA PANTALLA -->
     <!--  -->
@@ -368,20 +401,24 @@
           <label for="inputDescripcion">Descripción:</label>
         </div>
         <br />
-        <input
-          type="text"
+        <textarea
           class="inputDescripcion"
           id="inputDescripcion"
           placeholder="Ingrese descripcion"
-        />
-        <button class="guardarTarea" id="guardarTarea">Ver Listado</button>
+        ></textarea>
       </div>
-      <button class="botonFab" id="botonFab2">+</button>
+      <div class="botoneraGuardarVer">
+        <button class="btnGuardarTarea" id="btnGuardarTarea">
+          Guardar Tarea
+        </button>
+        <button class="verListado" id="verListado">Ver Listado</button>
+      </div>
     </section>
     <!-- TERCERA PANTALLA -->
 
     <section class="pantallaTres" id="pantallaTres">
       <!-- <ul class="tareaCargada" id="tareaCargada"></ul> -->
+      <!-- esto se tiene que iterar -->
       <div id="tareaCargada"></div>
 
       <div id="descripcionMostradaID" class="descripcionMostrada">
@@ -411,8 +448,10 @@
           </button>
         </div>
       </div>
-
-      <button class="botonFab" id="botonFab3">-</button>
+      <div class="masTareasFab">
+        <p class="agregarMasTareas">Agregar mas tareas &#10145;</p>
+        <button class="botonFab" id="botonFab3">+</button>
+      </div>
     </section>
     <!-- CUARTA PANTALLA -->
     <section class="pantallaCuatro" id="pantallaCuatro"></section>
@@ -422,16 +461,16 @@
     <script>
       // VARIABLES BOTON FAB
       let botonFab = document.getElementById("botonFab");
-      let botonFab2 = document.getElementById("guardarTarea");
+      let verListado = document.getElementById("verListado");
       let botonFab3 = document.getElementById("botonFab3");
       let pantallaUno = document.getElementById("pantallaUno");
       let pantallaDos = document.getElementById("pantallaDos");
       let pantallaTres = document.getElementById("pantallaTres");
       // VARIABLES BOTON GUARDAR TAREA
-      let guardarTareaBoton = document.getElementById("botonFab2");
+      let guardarTareaBoton = document.getElementById("btnGuardarTarea");
       let tareaCargada = document.getElementById("tareaCargada");
       let arrayTareas = [];
-      let imagenCategoria = document.getElementById("imagenCategoria");
+      // let imagenCategoria = document.getElementById("imagenCategoria");
       let popDescripcion = document.getElementById("popDescripcion");
       let descripcionP = document.getElementById("descripcionP");
       let mostrarDescripcion = document.getElementById("mostrarDescripcion");
@@ -473,6 +512,9 @@
           alert("Por favor, completa todos los datos!");
           return;
         }
+        pantallaUno.style.display = "none";
+        pantallaDos.style.display = "none";
+        pantallaTres.style.display = "flex";
         let emojiCategoria; //DECLARO VARIABLE PARA EMOJIS
         if (seleccionarCategoria.value == "hogar") {
           emojiCategoria = "&#127968;";
@@ -555,8 +597,8 @@
         dibujar();
         if (arrayTareas.length == 0) {
           console.log("hay ", arrayTareas.length, " tareas cargadas");
-          pantallaUno.style.display = "none";
-          pantallaDos.style.display = "flex";
+          pantallaUno.style.display = "flex";
+          pantallaDos.style.display = "none";
           pantallaTres.style.display = "none";
         }
       };
@@ -598,7 +640,7 @@
         pantallaDos.style.display = "flex";
         pantallaTres.style.display = "none";
       });
-      botonFab2.addEventListener("click", () => {
+      verListado.addEventListener("click", () => {
         if (arrayTareas.length === 0) {
           alert("Por favor, agregue por lo menos una tarea antes de seguir!");
           return;
@@ -624,6 +666,10 @@
       let arrayTareasViejo = JSON.parse(localStorage.getItem("tareasLocales"));
       if (arrayTareasViejo.length > 0) {
         arrayTareas = arrayTareasViejo;
+        /////para que aparezca en la pantalla de carga de tareas
+        pantallaUno.style.display = "none";
+        pantallaDos.style.display = "flex";
+        pantallaTres.style.display = "none";
 
         dibujar();
       }
